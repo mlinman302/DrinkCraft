@@ -1,0 +1,2 @@
+# DrinkCraft
+Minecraft Drinking Mod
