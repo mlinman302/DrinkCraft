@@ -1,7 +1,11 @@
 package com.minman.drinkcraft;
 
+import com.mojang.text2speech.Narrator;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.block.Blocks;
+import net.minecraft.registry.tag.BlockTags;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +23,14 @@ public class DrinkCraft implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("Hello World");
+
+		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
+
+			if(state.isIn(BlockTags.LOGS)){
+				Narrator.getNarrator().say("Breaking Wood", true, 100);
+			}
+		});
+
 	}
 }

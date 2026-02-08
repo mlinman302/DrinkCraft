@@ -3,15 +3,15 @@
 	"id": "drinkcraft",
 	"version": "${version}",
 	"name": "DrinkCraft",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This mod is for people who boozers",
 	"authors": [
-		"Me!"
+		"Max Inman"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://mlinman.com/",
+		"sources": "https://github.com/mlinman302/DrinkCraft"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/drinkcraft/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -20,6 +20,9 @@
 		],
 		"fabric-datagen": [
 			"com.minman.drinkcraft.DrinkCraftDataGenerator"
+		],
+		"client": [
+			"com.minman.drinkcraft.DrinkCraftModClient"
 		]
 	},
 	"mixins": [
