@@ -4,6 +4,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.StyleSpriteSource;
 import net.minecraft.text.Text;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -45,7 +46,7 @@ public class PlayerEventTracker {
         PlayerEventTracker tracker = getPlayerTracker(uuid);
         return Text.literal(DrinkEventRegistry.getEvent(id).displayName()
                 + ". " + tracker.playerName + " Takes " + DrinkEventRegistry.getEvent(id).sips() + " Sips");
-    }
+    };
 
     public static void trackEventForAll(EventId id){
         DrinkEvent event = DrinkEventRegistry.getEvent(id);
@@ -60,27 +61,30 @@ public class PlayerEventTracker {
             }
         });
 
-    }
+    };
 
     public static Text trackEventForAllWithPlayerMessage(EventId id){
         trackEventForAll(id);
         return Text.literal(DrinkEventRegistry.getEvent(id).displayName()
                 + ". All Players Take " + DrinkEventRegistry.getEvent(id).sips() + " Sips");
 
-    }
+    };
 
     public static int getPlayerTotalSips(UUID uuid){
         PlayerEventTracker tracker = getPlayerTracker(uuid);
         return tracker.totalSips;
-    }
+    };
 
     public static boolean shouldTrack(EventId id, UUID uuid){
         PlayerEventTracker tracker = getPlayerTracker(uuid);
         int numOccurrences = tracker.eventCounts.getOrDefault(id, 0);
         int maxOccurrences = DrinkEventRegistry.getEvent(id).maxOccurrences();
         return  numOccurrences < maxOccurrences || maxOccurrences == -1;
-    }
+    };
 
+    public static Collection<UUID> getAllUUIDs(){
+        return trackers.keySet();
+    }
 
 
     private static PlayerEventTracker getPlayerTracker(UUID id){

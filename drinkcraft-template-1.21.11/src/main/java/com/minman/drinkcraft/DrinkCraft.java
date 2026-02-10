@@ -1,13 +1,17 @@
 package com.minman.drinkcraft;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.entity.FakePlayer;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.server.network.ServerPlayerEntity;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.UUID;
 
 public class DrinkCraft implements ModInitializer {
 	public static final String MOD_ID = "drinkcraft";
@@ -25,19 +29,31 @@ public class DrinkCraft implements ModInitializer {
 
 
 		// Pass new players on the server to PlayerEventTracker to add new instance to players list
-		ServerPlayerEvents.JOIN.register(player -> {
-			PlayerEventTracker.registerPlayer(player);
-		});
+		ServerPlayerEvents.JOIN.register(PlayerEventTracker::registerPlayer);
 
 		LOGGER.info("Setup player event tracking logic.");
 
 
-		// Player death (tracked after respawn)
-		ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, isAlive) -> {
-			if (PlayerEventTracker.shouldTrack(EventId.PLAYER_DEATH, newPlayer.getUuid())){
-				// add to registry and push message
-				newPlayer.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventId.PLAYER_DEATH, newPlayer.getUuid()), false);
+		// Player death (tracked at death)
+		ServerLivingEntityEvents.AFTER_DEATH.register((deadEntity, damageSource) -> {
+			if (deadEntity instanceof ServerPlayerEntity player){
+				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventId.PLAYER_DEATH, player.getUuid()), false);
 			}
+
+		});
+
+		// Player kill
+		ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, entity, killedEntity, damageSource) -> {
+
+			LOGGER.info("Death event occurred");
+
+			// if a player on the server was killed by another player on the server
+			// pattern matches entity to player
+			if (killedEntity instanceof ServerPlayerEntity && entity instanceof ServerPlayerEntity player){
+				LOGGER.info("kill event occurred");
+				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventId.PLAYER_KILL, player.getUuid()), false);
+			}
+
 		});
 
 

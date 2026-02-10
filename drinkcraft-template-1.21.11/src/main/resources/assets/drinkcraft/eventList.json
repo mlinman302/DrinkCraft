@@ -1,0 +1,41 @@
+{
+  "events": [
+    {
+      "id":  "first-wood-break",
+      "displayName": "Breaking Wood",
+      "maxOccurrences": 1,
+      "sips": "3",
+      "type": "BLOCK_BREAK"
+    },
+    {
+      "id": "player-death",
+      "displayName": "You Died",
+      "maxOccurrences": "-1",
+      "sips": "3",
+      "type": "PLAYER_DEATH"
+    },
+    {
+      "id": "player-kill",
+      "displayName": "Killed: ",
+      "maxOccurrences": "-1",
+      "sips": "1",
+      "type": "PLAYER_KILL"
+    },
+    {
+      "id": "player-craft-iron-pick",
+      "displayName": "Crafted Iron Pick",
+      "maxOccurrences": "1",
+      "sips": "1",
+      "type": "PLAYER_CRAFT"
+    },
+    {
+      "id": "player-equip-full-iron",
+      "displayName": "Crafted Iron Pick",
+      "maxOccurrences": "1",
+      "sips": "1",
+      "type": "PLAYER_CRAFT"
+    }
+
+
+  ]
+}

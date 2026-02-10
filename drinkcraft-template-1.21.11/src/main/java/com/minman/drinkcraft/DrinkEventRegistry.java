@@ -29,6 +29,16 @@ public class DrinkEventRegistry {
                     false
             ));
 
+            // Kill tracking
+
+            registerEvent(new DrinkEvent(
+                    EventId.PLAYER_KILL,
+                    "Player Killed",
+                    -1,
+                    5,
+                    false
+            ));
+
             // Crafting events
             registerEvent(new DrinkEvent(
                     EventId.FIRST_IRON_PICK,
