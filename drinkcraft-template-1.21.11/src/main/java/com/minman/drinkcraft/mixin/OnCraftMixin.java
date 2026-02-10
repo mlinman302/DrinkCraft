@@ -1,0 +1,41 @@
+package com.minman.drinkcraft.mixin;
+
+
+import com.minman.drinkcraft.events.CraftingEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.CraftingScreenHandler;
+import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.SlotActionType;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+@Mixin(ScreenHandler.class)
+public class OnCraftMixin {
+
+
+    @Inject(
+            method = "onSlotClick",
+            at = @At("HEAD")
+    )
+    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci){
+        ScreenHandler handler = (ScreenHandler) (Object) this;
+
+        // If we are inside a crafting screen
+        if (handler instanceof CraftingScreenHandler || handler instanceof PlayerScreenHandler){
+
+            // check slot 0 (where the result of the crafting goes) for crafted item
+            if (slotIndex == 0 && (actionType == SlotActionType.PICKUP || actionType == SlotActionType.PICKUP_ALL)){
+                ItemStack craftedItem = handler.getSlot(0).getStack();
+
+                // send the item to our crafting event callback
+                if(!craftedItem.isEmpty() && !player.getEntityWorld().isClient()){
+                    CraftingEvents.onItemCraft(player, craftedItem);
+                }
+            }
+        }
+    }
+}

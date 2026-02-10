@@ -32,7 +32,7 @@ public class DrinkEventRegistry {
                     EventId.FIRST_IRON_PICK,
                     "First Iron Pickaxe Crafted",
                     1,
-                    1
+                    5
             ));
 
             // Equipment events

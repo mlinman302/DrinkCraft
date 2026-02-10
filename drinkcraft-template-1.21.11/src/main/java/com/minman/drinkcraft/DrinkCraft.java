@@ -26,7 +26,7 @@ public class DrinkCraft implements ModInitializer {
 		DrinkEventRegistry.register();
 
 
-		// Block break event handler
+		// Block breaking event: Handled in Fabric callback
 		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
 
 			// First wood break
@@ -38,8 +38,6 @@ public class DrinkCraft implements ModInitializer {
 						+ ". Player Take " + DrinkEventRegistry.getEvent(EventId.FIRST_WOOD_BREAK).sips() + " Sips"), true);
 			}
 		});
-
-		// Crafting tracking handler
 
 
 

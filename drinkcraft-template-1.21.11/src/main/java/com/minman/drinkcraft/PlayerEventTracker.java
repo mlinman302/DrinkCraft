@@ -14,12 +14,10 @@ public class PlayerEventTracker {
             if (event == null) {
                 throw new RuntimeException("Drink event not found in registry.");
             }
-
             int currentCount = eventCounts.getOrDefault(id, 0);
 
             eventCounts.put(id, currentCount + 1);
             totalSips += event.sips();
-
     };
 
     public static boolean shouldTrack(EventId id){
