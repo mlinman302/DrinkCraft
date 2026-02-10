@@ -10,6 +10,7 @@ public class DrinkEventsConfig {
         public String displayName;
         public int maxOccurrences;
         public int sips;
+        public boolean forAll;
     }
 
     public List<EventData> getEvents(){

@@ -16,7 +16,8 @@ public class DrinkEventRegistry {
                     EventId.FIRST_WOOD_BREAK,
                     "First Wood Broken",
                     1,
-                    3
+                    3,
+                    false
             ));
 
             // Death tracking
@@ -24,7 +25,8 @@ public class DrinkEventRegistry {
                     EventId.PLAYER_DEATH,
                     "Player Deaths",
                     -1,
-                    3
+                    3,
+                    false
             ));
 
             // Crafting events
@@ -32,7 +34,8 @@ public class DrinkEventRegistry {
                     EventId.FIRST_IRON_PICK,
                     "First Iron Pickaxe Crafted",
                     1,
-                    5
+                    5,
+                    false
             ));
 
             // Equipment events
@@ -40,7 +43,8 @@ public class DrinkEventRegistry {
                     EventId.FULL_ARMOR,
                     "Full Armor Equipped",
                     1,
-                    3
+                    3,
+                    false
             ));
 
             // Equipment events
@@ -48,8 +52,18 @@ public class DrinkEventRegistry {
                     EventId.ARMOR,
                     "One Armor Piece Equipped",
                     1,
-                    2
-        ));
+                    2,
+                    false
+            ));
+
+            // Eye of ender
+            registerEvent(new DrinkEvent(
+                    EventId.EYE_OF_ENDER,
+                    "Crafted First Eye of Ender",
+                    1,
+                    2,
+                    true
+            ));
         }
 
     // TODO: complete method for ability to load from JSON
@@ -68,7 +82,8 @@ public class DrinkEventRegistry {
                             event.id,
                             event.displayName,
                             event.maxOccurrences,
-                            event.sips
+                            event.sips,
+                            event.forAll
                     );
                     DrinkEventRegistry.registerEvent(e);
                 }

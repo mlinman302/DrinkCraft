@@ -7,4 +7,5 @@ public enum EventId {
     FIRST_IRON_PICK,
     ARMOR,
     FULL_ARMOR,
+    EYE_OF_ENDER
 }
