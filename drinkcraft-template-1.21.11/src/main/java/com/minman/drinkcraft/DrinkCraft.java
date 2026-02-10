@@ -27,7 +27,6 @@ public class DrinkCraft implements ModInitializer {
 		// Set up registry of all events (immutable)
 		DrinkEventRegistry.register();
 
-
 		// Pass new players on the server to PlayerEventTracker to add new instance to players list
 		ServerPlayerEvents.JOIN.register(PlayerEventTracker::registerPlayer);
 
@@ -41,6 +40,7 @@ public class DrinkCraft implements ModInitializer {
 			}
 
 		});
+
 
 		// Player kill
 		ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, entity, killedEntity, damageSource) -> {
@@ -66,12 +66,6 @@ public class DrinkCraft implements ModInitializer {
 				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventId.FIRST_WOOD_BREAK, player.getUuid()), false);
 			}
 		});
-
-
-
-
-
-
 
 
 

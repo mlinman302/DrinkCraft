@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ScreenHandler.class)
-public class OnCraftMixin {
+public class onSlotClickMixin {
 
 
     @Inject(
@@ -23,6 +23,7 @@ public class OnCraftMixin {
     )
     public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci){
         ScreenHandler handler = (ScreenHandler) (Object) this;
+
 
         // If we are inside a crafting screen
         if (handler instanceof CraftingScreenHandler || handler instanceof PlayerScreenHandler){

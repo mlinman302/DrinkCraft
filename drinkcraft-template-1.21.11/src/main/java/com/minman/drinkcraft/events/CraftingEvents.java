@@ -1,12 +1,10 @@
 package com.minman.drinkcraft.events;
 
-import com.minman.drinkcraft.DrinkEventRegistry;
 import com.minman.drinkcraft.EventId;
 import com.minman.drinkcraft.PlayerEventTracker;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.Text;
 
 public class CraftingEvents {
 
