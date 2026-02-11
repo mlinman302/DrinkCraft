@@ -21,11 +21,13 @@ public class DrinkCraft implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
-		// Set up registry of all events (immutable)
-		DrinkEventRegistry.register();
-
-		// Pass new players on the server to PlayerEventTracker to add new instance to players list
+//		// Pass new players on the server to PlayerEventTracker to add new instance to players list
 		ServerPlayerEvents.JOIN.register(PlayerEventTracker::registerPlayer);
+
+		// Set up custom events
+		DrinkEventRegistry.registerCustomEvents();
+
+
 
 		LOGGER.info("Setup player event tracking logic.");
 
@@ -33,33 +35,28 @@ public class DrinkCraft implements ModInitializer {
 		// Player death (tracked at death)
 		ServerLivingEntityEvents.AFTER_DEATH.register((deadEntity, damageSource) -> {
 			if (deadEntity instanceof ServerPlayerEntity player){
-				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventId.PLAYER_DEATH, player.getUuid()), false);
+				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventIds.PLAYER_DEATH, player.getUuid()), false);
 			}
 		});
 
 
 		// Player kill
 		ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, entity, killedEntity, damageSource) -> {
-
 			// if a player on the server was killed by another player on the server
 			// pattern matches entity to player
 			if (killedEntity instanceof ServerPlayerEntity && entity instanceof ServerPlayerEntity player){
-				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventId.PLAYER_KILL, player.getUuid()), false);
+				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventIds.PLAYER_KILL, player.getUuid()), false);
 			}
 		});
 
 
 		// Block breaking event: Handled in Fabric callback
 		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-
 			// First wood break
-			if(state.isIn(BlockTags.LOGS) && PlayerEventTracker.shouldTrack(EventId.FIRST_WOOD_BREAK, player.getUuid())){
+			if(state.isIn(BlockTags.LOGS) && PlayerEventTracker.shouldTrack(EventIds.FIRST_WOOD_BREAK, player.getUuid())){
 				// add to registry and push message
-				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventId.FIRST_WOOD_BREAK, player.getUuid()), false);
+				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventIds.FIRST_WOOD_BREAK, player.getUuid()), false);
 			}
 		});
-
-
-
 	}
 }

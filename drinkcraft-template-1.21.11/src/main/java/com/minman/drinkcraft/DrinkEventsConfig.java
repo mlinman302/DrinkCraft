@@ -6,7 +6,7 @@ public class DrinkEventsConfig {
     private List<EventData> events;
 
     public static class EventData {
-        public EventId id;
+        public String id;
         public String displayName;
         public int maxOccurrences;
         public int sips;

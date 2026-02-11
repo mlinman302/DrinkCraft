@@ -1,7 +1,9 @@
 package com.minman.drinkcraft;
 
 
-public record DrinkEvent(EventId id, String displayName, int maxOccurrences, int sips, boolean forAll) {
+import java.util.Objects;
+
+public record DrinkEvent(String id, String displayName, int maxOccurrences, int sips, boolean forAll) {
 
 }
 

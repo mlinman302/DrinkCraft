@@ -2,16 +2,12 @@ package com.minman.drinkcraft;
 
 import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.StyleSpriteSource;
 import net.minecraft.text.Text;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerEventTracker {
-    private final Map<EventId, Integer> eventCounts = new HashMap<>();
+    private final Map<String, Integer> eventCounts = new HashMap<>();
     private final Map<String, Integer> advancementEvents = new HashMap<>();
     private int totalSips = 0;
     private final String playerName;
@@ -22,14 +18,13 @@ public class PlayerEventTracker {
         this.playerName = username;
     }
 
-
     // registers a new player if they aren't registered on the session yet
     public static void registerPlayer(ServerPlayerEntity player){
         trackers.putIfAbsent(player.getUuid(), new PlayerEventTracker(player.getStringifiedName()));
     }
 
     // tracks an event to a specific player
-    public static void trackEvent(EventId id, UUID uuid){
+    public static PlayerEventTracker trackEvent(String id, UUID uuid){
         DrinkEvent event = DrinkEventRegistry.getEvent(id);
 
             if (event == null) {
@@ -41,16 +36,17 @@ public class PlayerEventTracker {
             int currentCount = tracker.eventCounts.getOrDefault(id, 0);
             tracker.eventCounts.put(id, currentCount + 1);
             tracker.totalSips += event.sips();
+
+            return tracker;
     };
 
-    public static Text trackEventWithPlayerMessage(EventId id, UUID uuid){
-        trackEvent(id, uuid);
-        PlayerEventTracker tracker = getPlayerTracker(uuid);
+    public static Text trackEventWithPlayerMessage(String id, UUID uuid){
+        PlayerEventTracker tracker = trackEvent(id, uuid);
         return Text.literal(DrinkEventRegistry.getEvent(id).displayName()
                 + ". " + tracker.playerName + " Takes " + DrinkEventRegistry.getEvent(id).sips() + " Sips");
     };
 
-    public static void trackEventForAll(EventId id){
+    public static void trackEventForAll(String id){
         DrinkEvent event = DrinkEventRegistry.getEvent(id);
 
         if (event == null) {
@@ -65,41 +61,61 @@ public class PlayerEventTracker {
 
     };
 
-    public static Text trackEventForAllWithPlayerMessage(EventId id){
+    public static Text trackEventForAllWithPlayerMessage(String id){
         trackEventForAll(id);
         return Text.literal(DrinkEventRegistry.getEvent(id).displayName()
                 + ". All Players Take " + DrinkEventRegistry.getEvent(id).sips() + " Sips");
 
     };
 
-    public static int getPlayerTotalSips(UUID uuid){
-        PlayerEventTracker tracker = getPlayerTracker(uuid);
-        return tracker.totalSips;
-    };
-
-    public static boolean shouldTrack(EventId id, UUID uuid){
+    public static boolean shouldTrack(String id, UUID uuid){
         PlayerEventTracker tracker = getPlayerTracker(uuid);
         int numOccurrences = tracker.eventCounts.getOrDefault(id, 0);
         int maxOccurrences = DrinkEventRegistry.getEvent(id).maxOccurrences();
         return  numOccurrences < maxOccurrences || maxOccurrences == -1;
     };
 
-    public static void trackAdvancementEvent(ServerPlayerEntity player, AdvancementEntry advancement) {
-        getPlayerTracker(player.getUuid()).advancementEvents.putIfAbsent(advancement.toString(), 2);
-        System.out.print("My advancement: {}" + advancement.toString());
+    public static PlayerEventTracker trackAdvancementEvent(String id, UUID uuid) {
+        PlayerEventTracker tracker = getPlayerTracker(uuid);
+        tracker.advancementEvents.putIfAbsent(id, 2);
+        tracker.totalSips += DrinkEventRegistry.getEvent(EventIds.ALL_ADVANCEMENTS).sips();
+        return tracker;
+    }
 
+    public static Text trackAdvancementEventWithPlayerMessage(String id, UUID uuid){
+        PlayerEventTracker tracker = trackAdvancementEvent(id, uuid);
+        return Text.literal(id + tracker.playerName + " Take " +
+                DrinkEventRegistry.getEvent(EventIds.ALL_ADVANCEMENTS).sips() + " Sips");
+    }
+
+    public static boolean shouldTrackAdvancement(String id, UUID uuid){
+        String[] splitId = id.split("[:/]");
+        return trackableAdvancement(splitId) && playerDoesntHaveAdvancement(id, uuid);
     }
 
     public static Collection<UUID> getAllUUIDs(){
         return trackers.keySet();
     }
 
+    public static int getPlayerTotalSips(UUID uuid){
+        PlayerEventTracker tracker = getPlayerTracker(uuid);
+        return tracker.totalSips;
+    };
 
     private static PlayerEventTracker getPlayerTracker(UUID id){
         return trackers.get(id);
     };
 
+    private static boolean trackableAdvancement(String[] splitAdvancementId){
+        String branchName = splitAdvancementId[1];
+        return splitAdvancementId[0].equals("minecraft") &&
+                (branchName.equals("story") || branchName.equals("nether") || branchName.equals("end"));
+    }
 
+    private static boolean playerDoesntHaveAdvancement(String id, UUID uuid){
+        PlayerEventTracker tracker = getPlayerTracker(uuid);
+        return (tracker.advancementEvents.getOrDefault(id, 0) == 0);
 
+    }
 
 }
