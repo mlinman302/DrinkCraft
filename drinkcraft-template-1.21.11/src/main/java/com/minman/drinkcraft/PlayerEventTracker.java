@@ -1,5 +1,6 @@
 package com.minman.drinkcraft;
 
+import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.StyleSpriteSource;
 import net.minecraft.text.Text;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 public class PlayerEventTracker {
     private final Map<EventId, Integer> eventCounts = new HashMap<>();
+    private final Map<String, Integer> advancementEvents = new HashMap<>();
     private int totalSips = 0;
     private final String playerName;
 
@@ -82,6 +84,12 @@ public class PlayerEventTracker {
         return  numOccurrences < maxOccurrences || maxOccurrences == -1;
     };
 
+    public static void trackAdvancementEvent(ServerPlayerEntity player, AdvancementEntry advancement) {
+        getPlayerTracker(player.getUuid()).advancementEvents.putIfAbsent(advancement.toString(), 2);
+        System.out.print("My advancement: {}" + advancement.toString());
+
+    }
+
     public static Collection<UUID> getAllUUIDs(){
         return trackers.keySet();
     }
@@ -90,6 +98,7 @@ public class PlayerEventTracker {
     private static PlayerEventTracker getPlayerTracker(UUID id){
         return trackers.get(id);
     };
+
 
 
 

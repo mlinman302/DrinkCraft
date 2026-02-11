@@ -5,7 +5,8 @@
 	"mixins": [
 		"ExampleMixin",
       	"onSlotClickMixin",
-		"onEquipStackMixin"
+		"onEquipStackMixin",
+		"onGrantAdvancementCriterionMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

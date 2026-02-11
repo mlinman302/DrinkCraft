@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import com.google.gson.Gson;
+import jdk.jfr.Event;
+import net.minecraft.advancement.AdvancementEntry;
+import net.minecraft.server.MinecraftServer;
 
 public class DrinkEventRegistry {
     private static final Map<EventId, DrinkEvent> allEvents = new HashMap<>();
@@ -16,7 +19,7 @@ public class DrinkEventRegistry {
                     EventId.FIRST_WOOD_BREAK,
                     "First Wood Broken",
                     1,
-                    3,
+                    2,
                     false
             ));
 
@@ -25,7 +28,7 @@ public class DrinkEventRegistry {
                     EventId.PLAYER_DEATH,
                     "Player Deaths",
                     -1,
-                    3,
+                    2,
                     false
             ));
 
@@ -35,16 +38,7 @@ public class DrinkEventRegistry {
                     EventId.PLAYER_KILL,
                     "Player Killed",
                     -1,
-                    5,
-                    false
-            ));
-
-            // Crafting events
-            registerEvent(new DrinkEvent(
-                    EventId.FIRST_IRON_PICK,
-                    "First Iron Pickaxe Crafted",
-                    1,
-                    5,
+                    2,
                     false
             ));
 
@@ -53,20 +47,12 @@ public class DrinkEventRegistry {
                     EventId.FULL_ARMOR,
                     "Full Armor Equipped",
                     1,
-                    3,
-                    false
-            ));
-
-            // Equipment events
-            registerEvent(new DrinkEvent(
-                    EventId.ARMOR,
-                    "One Armor Piece Equipped",
-                    1,
                     2,
                     false
             ));
 
-            // Eye of ender
+
+            // Eye of Ender
             registerEvent(new DrinkEvent(
                     EventId.EYE_OF_ENDER,
                     "Crafted First Eye of Ender",
@@ -115,6 +101,25 @@ public class DrinkEventRegistry {
 
     public static Collection<DrinkEvent> getAllEvents(){
         return allEvents.values();
+    }
+
+    public static void registerAdvancements(MinecraftServer server){
+        for (AdvancementEntry advancement : server.getAdvancementLoader().getAdvancements()){
+            String advancementId = advancement.id().toString();
+            advancement.value().display().ifPresent(display -> {
+                String title = display.getTitle().getString();
+                DrinkEvent event = new DrinkEvent(
+                        advancementId,
+                        title,
+                        1,
+                        2,
+                        false
+
+
+                )
+            });
+        }
+
     }
 
 
