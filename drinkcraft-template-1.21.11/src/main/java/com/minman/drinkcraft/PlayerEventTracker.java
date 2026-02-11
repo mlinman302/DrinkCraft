@@ -1,21 +1,33 @@
 package com.minman.drinkcraft;
 
-import net.minecraft.advancement.AdvancementEntry;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.*;
 
 public class PlayerEventTracker {
-    private final Map<String, Integer> eventCounts = new HashMap<>();
-    private final Map<String, Integer> advancementEvents = new HashMap<>();
+    private Map<String, Integer> eventCounts = new HashMap<>();
+    private Map<String, Integer> advancementEvents = new HashMap<>();
     private int totalSips = 0;
-    private final String playerName;
+    private final String name;
 
     private static final Map<UUID, PlayerEventTracker> trackers = new HashMap<>();
 
+
+    public PlayerEventTracker(Map<String, Integer> eventCounts,
+                              Map<String, Integer> advancementEvents,
+                              int totalSips,
+                              String name){
+        this.eventCounts = eventCounts;
+        this.advancementEvents = advancementEvents;
+        this.totalSips = totalSips;
+        this.name = name;
+    }
+
     public PlayerEventTracker(String username){
-        this.playerName = username;
+        this.name = username;
     }
 
     // registers a new player if they aren't registered on the session yet
@@ -43,7 +55,7 @@ public class PlayerEventTracker {
     public static Text trackEventWithPlayerMessage(String id, UUID uuid){
         PlayerEventTracker tracker = trackEvent(id, uuid);
         return Text.literal(DrinkEventRegistry.getEvent(id).displayName()
-                + ". " + tracker.playerName + " Takes " + DrinkEventRegistry.getEvent(id).sips() + " Sips");
+                + ". " + tracker.name + " Takes " + DrinkEventRegistry.getEvent(id).sips() + " Sips");
     };
 
     public static void trackEventForAll(String id){
@@ -84,7 +96,7 @@ public class PlayerEventTracker {
 
     public static Text trackAdvancementEventWithPlayerMessage(String id, UUID uuid){
         PlayerEventTracker tracker = trackAdvancementEvent(id, uuid);
-        return Text.literal(id + tracker.playerName + " Take " +
+        return Text.literal(id + tracker.name + " Take " +
                 DrinkEventRegistry.getEvent(EventIds.ALL_ADVANCEMENTS).sips() + " Sips");
     }
 
@@ -102,6 +114,38 @@ public class PlayerEventTracker {
         return tracker.totalSips;
     };
 
+    public Map<String, Integer> getEventCounts(){
+        return this.eventCounts;
+    }
+    public Map<String, Integer> getAdvancementEvents(){
+        return this.advancementEvents;
+    }
+
+    public int getTotalSips(){
+        return this.totalSips;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public static final Codec<PlayerEventTracker> CODEC =
+            RecordCodecBuilder.create(instance -> instance.group(
+                            Codec.unboundedMap(Codec.STRING, Codec.INT)
+                                    .fieldOf("eventCounts")
+                                    .forGetter(PlayerEventTracker::getEventCounts),
+                            Codec.unboundedMap(Codec.STRING, Codec.INT)
+                                    .fieldOf("advancementEvents")
+                                    .forGetter(PlayerEventTracker::getAdvancementEvents),
+                            Codec.INT
+                                    .fieldOf("totalSips")
+                                    .forGetter(PlayerEventTracker::getTotalSips),
+                            Codec.STRING
+                                    .fieldOf("playerName")
+                                    .forGetter(PlayerEventTracker::getName))
+                    .apply(instance, PlayerEventTracker::new)
+            );
+
     private static PlayerEventTracker getPlayerTracker(UUID id){
         return trackers.get(id);
     };
@@ -117,5 +161,4 @@ public class PlayerEventTracker {
         return (tracker.advancementEvents.getOrDefault(id, 0) == 0);
 
     }
-
 }
