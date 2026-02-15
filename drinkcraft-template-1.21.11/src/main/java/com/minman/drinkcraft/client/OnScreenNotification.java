@@ -16,7 +16,7 @@ public class OnScreenNotification extends OnScreenEvent{
         this.totalSips = totalSips;
     }
 
-    public void render(DrawContext context, int screenWidth, int y) {
+    public void renderNotification(DrawContext context, int screenWidth, int y) {
         MinecraftClient client = MinecraftClient.getInstance();
 
         double timeRemaining = this.endTime - (Util.getMeasuringTimeMs() / 1000.0) ;

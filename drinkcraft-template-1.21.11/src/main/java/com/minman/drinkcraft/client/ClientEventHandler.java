@@ -34,7 +34,6 @@ public class ClientEventHandler {
             );
         }
 
-        // render HUD
 
         // Show HUD notification
         HudNotificationManager.addNotification(
@@ -42,5 +41,8 @@ public class ClientEventHandler {
                 sips,
                 totalSips
         );
+
+        // Show Image
+        HudImageManager.addImage();
     }
 }

@@ -1,14 +1,10 @@
 package com.minman.drinkcraft.client;
 
-import com.minman.drinkcraft.DrinkCraft;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
 public class HudNotificationManager implements Renderable {
@@ -18,7 +14,7 @@ public class HudNotificationManager implements Renderable {
     private static final double DISPLAY_TIME = 4.0; // seconds
     private static final double FADE_TIME = 1.0; // seconds
 
-    private static final Identifier COORS_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/coors.png");
+
 
     public static void addNotification(String eventName, int sips, int totalSips) {
         // Remove the oldest if at max
@@ -52,24 +48,9 @@ public class HudNotificationManager implements Renderable {
             int y = screenHeight / 2 - 40; // Start above center
 
             for (OnScreenNotification notification : ACTIVE_NOTIFICATIONS) {
-                notification.render(drawContext, screenWidth, y);
+                notification.renderNotification(drawContext, screenWidth, y);
                 y -= 30; // Stack notifications upward
             }
-
-    }
-
-    public static void renderImage(DrawContext drawContext, RenderTickCounter tickCounter){
-        MinecraftClient client = MinecraftClient.getInstance();
-
-        int screenHeight = drawContext.getScaledWindowHeight();
-        int screenWidth = drawContext.getScaledWindowWidth();
-
-
-        drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, COORS_IMG,
-                screenWidth / 2, screenHeight / 2,
-                0.0F, 0.0F,
-                (int) (screenWidth * 0.8), (int) (screenHeight * 0.8),
-                275, 183);
 
     }
 

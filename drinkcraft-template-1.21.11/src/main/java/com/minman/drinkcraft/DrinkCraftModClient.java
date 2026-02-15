@@ -1,6 +1,7 @@
 package com.minman.drinkcraft;
 
 import com.minman.drinkcraft.client.ClientEventHandler;
+import com.minman.drinkcraft.client.HudImageManager;
 import com.minman.drinkcraft.client.HudNotificationManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
@@ -19,13 +20,17 @@ public class DrinkCraftModClient implements ClientModInitializer {
         // setup event handler for when we receive a packet
         ClientEventHandler.register();
 
+        // register images for rendering
+        HudImageManager.registerImages();
 
-        // attach hud element before Chat
-        HudElementRegistry.attachElementBefore(
+
+        // attach image layer after Chat
+        HudElementRegistry.attachElementAfter(
                 VanillaHudElements.CHAT,
                 Identifier.of(DrinkCraft.MOD_ID, "before_chat"),
-                HudNotificationManager::renderImage);
+                HudImageManager::render);
 
+        // attach notification layer on top
         HudElementRegistry.addFirst(
                 Identifier.of(DrinkCraft.MOD_ID, "top_layer"),
                 HudNotificationManager::render);
