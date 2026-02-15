@@ -19,9 +19,8 @@ public class ArmorEvents {
         if(! (helmet.isEmpty() && chestplate.isEmpty() && leggings.isEmpty() && boots.isEmpty())){
             // if we can track the event
             if (PlayerEventTracker.shouldTrack(EventIds.FULL_ARMOR, player.getUuid())){
-                player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventIds.FULL_ARMOR, player.getUuid()));
+                PlayerEventTracker.trackEventWithPayload(EventIds.FULL_ARMOR, player);
             }
-
         }
 
     }

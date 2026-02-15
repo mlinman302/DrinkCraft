@@ -26,8 +26,6 @@ public class PlayerData extends PersistentState {
         this.playersData = map;
     }
 
-    public void update ()
-
     public static final Codec<PlayerData> CODEC  =
             RecordCodecBuilder.create(instance -> instance.group(
                     Codec.unboundedMap(Uuids.CODEC, PlayerEventTracker.CODEC)

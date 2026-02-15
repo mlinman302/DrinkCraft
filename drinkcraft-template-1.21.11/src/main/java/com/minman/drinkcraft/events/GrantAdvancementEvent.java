@@ -8,7 +8,7 @@ public class GrantAdvancementEvent {
     public static void logAdvancement(ServerPlayerEntity player, AdvancementEntry advancement) {
 
         if (PlayerEventTracker.shouldTrackAdvancement(advancement.id().toString(), player.getUuid())){
-            player.sendMessage(PlayerEventTracker.trackAdvancementEventWithPlayerMessage(advancement.id().toString(), player.getUuid()));
+            PlayerEventTracker.trackAdvancementWithPayload(advancement.id().toString(), player);
         };
     }
 }

@@ -1,5 +1,6 @@
 package com.minman.drinkcraft;
 
+import com.minman.drinkcraft.sound.DrinkSounds;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -27,15 +28,18 @@ public class DrinkCraft implements ModInitializer {
 		// Set up custom events
 		DrinkEventRegistry.registerCustomEvents();
 
+		// Register sounds
+		DrinkSounds.registerSounds();
 
+		// Register payload information for server -> client comms
+		DrinkEventPayload.registerPayload();
 
-		LOGGER.info("Setup player event tracking logic.");
 
 
 		// Player death (tracked at death)
 		ServerLivingEntityEvents.AFTER_DEATH.register((deadEntity, damageSource) -> {
 			if (deadEntity instanceof ServerPlayerEntity player){
-				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventIds.PLAYER_DEATH, player.getUuid()), false);
+				PlayerEventTracker.trackEventWithPayload(EventIds.PLAYER_DEATH, player);
 			}
 		});
 
@@ -45,17 +49,19 @@ public class DrinkCraft implements ModInitializer {
 			// if a player on the server was killed by another player on the server
 			// pattern matches entity to player
 			if (killedEntity instanceof ServerPlayerEntity && entity instanceof ServerPlayerEntity player){
-				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventIds.PLAYER_KILL, player.getUuid()), false);
+				PlayerEventTracker.trackEventWithPayload(EventIds.PLAYER_KILL, player);
 			}
 		});
 
 
 		// Block breaking event: Handled in Fabric callback
 		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-			// First wood break
-			if(state.isIn(BlockTags.LOGS) && PlayerEventTracker.shouldTrack(EventIds.FIRST_WOOD_BREAK, player.getUuid())){
-				// add to registry and push message
-				player.sendMessage(PlayerEventTracker.trackEventWithPlayerMessage(EventIds.FIRST_WOOD_BREAK, player.getUuid()), false);
+			if (player instanceof ServerPlayerEntity serverPlayer) {
+
+				// First wood break
+				if (state.isIn(BlockTags.LOGS) && PlayerEventTracker.shouldTrack(EventIds.FIRST_WOOD_BREAK, serverPlayer.getUuid())) {
+					PlayerEventTracker.trackEventWithPayload(EventIds.FIRST_WOOD_BREAK, serverPlayer);
+				}
 			}
 		});
 	}

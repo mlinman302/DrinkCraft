@@ -1,9 +1,17 @@
 package com.minman.drinkcraft;
 
+import com.minman.drinkcraft.sound.DrinkSounds;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.*;
 
@@ -52,6 +60,23 @@ public class PlayerEventTracker {
             return tracker;
     };
 
+
+    public static void trackEventWithPayload(String id, ServerPlayerEntity player){
+        PlayerEventTracker tracker = trackEvent(id, player.getUuid());
+        notifyClient(player, DrinkEventRegistry.getEvent(id));
+    }
+
+    public static void trackEventForAllWithPayload(String id, ServerPlayerEntity player){
+        trackEventForAll(id);
+        MinecraftServer server = player.getEntityWorld().getServer();
+
+        trackers.keySet().forEach(uuid -> {
+            assert server != null;
+            notifyClient(Objects.requireNonNull(server.getPlayerManager().getPlayer(uuid)), DrinkEventRegistry.getEvent(id));
+        });
+    }
+
+
     public static Text trackEventWithPlayerMessage(String id, UUID uuid){
         PlayerEventTracker tracker = trackEvent(id, uuid);
         return Text.literal(DrinkEventRegistry.getEvent(id).displayName()
@@ -92,6 +117,19 @@ public class PlayerEventTracker {
         tracker.advancementEvents.putIfAbsent(id, 2);
         tracker.totalSips += DrinkEventRegistry.getEvent(EventIds.ALL_ADVANCEMENTS).sips();
         return tracker;
+    }
+
+    public static void trackAdvancementWithPayload(String id, ServerPlayerEntity player){
+        trackAdvancementEvent(id, player.getUuid());
+        DrinkEvent basicAdvancementEvent = DrinkEventRegistry.getEvent(EventIds.ALL_ADVANCEMENTS);
+        notifyClient(player, new DrinkEvent(
+                id,
+                id,
+                basicAdvancementEvent.maxOccurrences(),
+                basicAdvancementEvent.sips(),
+                basicAdvancementEvent.forAll()
+        ));
+
     }
 
     public static Text trackAdvancementEventWithPlayerMessage(String id, UUID uuid){
@@ -161,4 +199,17 @@ public class PlayerEventTracker {
         return (tracker.advancementEvents.getOrDefault(id, 0) == 0);
 
     }
+
+    private static void notifyClient(ServerPlayerEntity player, DrinkEvent event){
+        DrinkEventPayload payload = new DrinkEventPayload(
+                event.sips(),
+                PlayerEventTracker.getPlayerTracker(player.getUuid()).getTotalSips(),
+                event.displayName(),
+                event.id()
+        );
+        ServerPlayNetworking.send(player, payload);
+
+    }
+
+
 }
