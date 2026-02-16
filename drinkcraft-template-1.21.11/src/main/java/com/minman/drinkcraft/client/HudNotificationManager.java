@@ -1,18 +1,24 @@
 package com.minman.drinkcraft.client;
 
+import com.minman.drinkcraft.DrinkCraft;
 import net.minecraft.client.gui.DrawContext;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
-public class HudNotificationManager implements Renderable {
+public class HudNotificationManager {
 
     private static final List<OnScreenNotification> ACTIVE_NOTIFICATIONS = new ArrayList<>();
     private static final int MAX_NOTIFICATIONS = 3;
     private static final double DISPLAY_TIME = 4.0; // seconds
     private static final double FADE_TIME = 1.0; // seconds
+    private static final double WAIT_TIME = 2.0; // seconds
+
+    public static final Identifier TOAST_BG = Identifier.of("minecraft", "textures/gui/sprites/toast/advancement.png");
+    public static final Identifier BEER_SPRITE = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/sprites/beer.png");
 
 
 
@@ -29,7 +35,8 @@ public class HudNotificationManager implements Renderable {
                 Util.getMeasuringTimeMs() / 1000.0,
                 DISPLAY_TIME,
                 FADE_TIME,
-                FADE_TIME));
+                FADE_TIME,
+                WAIT_TIME));
     };
 
     public static void render(DrawContext drawContext, RenderTickCounter tickCounter) {
@@ -45,7 +52,7 @@ public class HudNotificationManager implements Renderable {
         int screenHeight = drawContext.getScaledWindowHeight();
         int screenWidth = drawContext.getScaledWindowWidth();
 
-            int y = screenHeight / 2 - 40; // Start above center
+            int y = (int) (screenHeight * 0.1); // Start above center
 
             for (OnScreenNotification notification : ACTIVE_NOTIFICATIONS) {
                 notification.renderNotification(drawContext, screenWidth, y);

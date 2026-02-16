@@ -1,7 +1,6 @@
 package com.minman.drinkcraft.client;
 
 import com.minman.drinkcraft.DrinkCraft;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class HudImageManager implements Renderable{
+public class HudImageManager {
 
     private static final Identifier COORS_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/coors.png");
     private static final Identifier IPA_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/ipa.png");
@@ -49,7 +48,7 @@ public class HudImageManager implements Renderable{
                 FADE_IN_TIME,
                 FADE_OUT_TIME);
 
-        ACTIVE_IMAGE.add(osImg);
+        ACTIVE_IMAGE.addFirst(osImg);
 
     }
 
@@ -62,13 +61,14 @@ public class HudImageManager implements Renderable{
             return;
         }
 
-        MinecraftClient client = MinecraftClient.getInstance();
-
         int screenHeight = drawContext.getScaledWindowHeight();
         int screenWidth = drawContext.getScaledWindowWidth();
 
-        for (OnScreenImage osImg : ACTIVE_IMAGE) {
-            osImg.renderImage(drawContext, screenWidth, screenHeight);
-        }
+
+        ACTIVE_IMAGE.getFirst().renderImage(drawContext, screenWidth, screenHeight);
+    }
+
+    public static void renderOverScreen(){
+
     }
 }

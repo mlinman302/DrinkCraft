@@ -6,6 +6,7 @@ import com.minman.drinkcraft.client.HudNotificationManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.util.Identifier;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -28,11 +29,11 @@ public class DrinkCraftModClient implements ClientModInitializer {
         HudElementRegistry.attachElementAfter(
                 VanillaHudElements.CHAT,
                 Identifier.of(DrinkCraft.MOD_ID, "before_chat"),
-                HudImageManager::render);
+                HudNotificationManager::render);
 
         // attach notification layer on top
         HudElementRegistry.addFirst(
                 Identifier.of(DrinkCraft.MOD_ID, "top_layer"),
-                HudNotificationManager::render);
+                HudImageManager::render);
     }
 }

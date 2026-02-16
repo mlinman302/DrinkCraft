@@ -8,8 +8,8 @@ public abstract class OnScreenEvent {
     private final double fadeInTime;
     private final double fadeOutTime;
 
-    public OnScreenEvent(double startTime, double duration, double fadeInTime, double fadeOutTime){
-        this.endTime = startTime + duration;
+    public OnScreenEvent(double startTime, double duration, double fadeInTime, double fadeOutTime, double waitTime){
+        this.endTime = startTime + duration + waitTime;
         this.duration = duration;
         this.fadeInTime = fadeInTime;
         this.fadeOutTime = fadeOutTime;
@@ -21,6 +21,11 @@ public abstract class OnScreenEvent {
     }
 
     public double getAlpha(double timeRemaining) {
+        // wait for waitTime
+        if(timeRemaining - duration > 0){
+            return 0.0;
+        }
+
         // Fade in
         double fadeInTimeRemaining = timeRemaining - (duration - fadeInTime);
 

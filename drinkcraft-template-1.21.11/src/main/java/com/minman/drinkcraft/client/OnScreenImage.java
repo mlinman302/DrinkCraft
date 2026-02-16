@@ -10,7 +10,7 @@ public class OnScreenImage extends OnScreenEvent {
     private final Identifier id;
 
     public OnScreenImage(Identifier id, double startTime, double duration, double fadeInTime, double fadeOutTime) {
-        super(startTime, duration, fadeInTime, fadeOutTime);
+        super(startTime, duration, fadeInTime, fadeOutTime, 0.0);
         this.id = id;
     }
 

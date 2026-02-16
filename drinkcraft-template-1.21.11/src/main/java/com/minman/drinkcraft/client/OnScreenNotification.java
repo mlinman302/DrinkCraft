@@ -1,16 +1,18 @@
 package com.minman.drinkcraft.client;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.ColorHelper;
 
 public class OnScreenNotification extends OnScreenEvent{
     private final String eventName;
     private final int sips;
     private final int totalSips;
 
-    public OnScreenNotification(String eventName, int sips, int totalSips, double startTime, double duration, double fadeInTime, double fadeOutTime) {
-        super(startTime, duration, fadeInTime, fadeOutTime);
+    public OnScreenNotification(String eventName, int sips, int totalSips, double startTime, double duration, double fadeInTime, double fadeOutTime, double waitTime) {
+        super(startTime, duration, fadeInTime, fadeOutTime, waitTime);
         this.eventName = eventName;
         this.sips = sips;
         this.totalSips = totalSips;
@@ -22,24 +24,35 @@ public class OnScreenNotification extends OnScreenEvent{
         double timeRemaining = this.endTime - (Util.getMeasuringTimeMs() / 1000.0) ;
 
         double alpha = getAlpha(timeRemaining);
-        int alphaInt = (int) (alpha * 255);
+        float alphaF = (float) alpha;
 
         String pointsText = (sips > 0 ? "§a+" : "§c") + sips + " sips";
         String totalText = "§7Total: " + totalSips;
         String nameText = "§6" + eventName;
 
-        int x = screenWidth - 160;
+        int x = (int) (screenWidth * 0.05);
 
-        // Draw background
-        context.fill(
+
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, HudNotificationManager.TOAST_BG,
                 x - 5, y - 5,
-                x + 155, y + 25,
-                (alphaInt / 2) << 24  // Semi-transparent black
-        );
+                0.0F, 0.0F,
+                160, 32,
+                160, 32,
+                ColorHelper.getWhite(alphaF));
+
+
+        // Draw sprite
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, HudNotificationManager.BEER_SPRITE,
+                x, y,
+                0.0F, 0.0F,
+                20, 20,
+                20, 20,
+                ColorHelper.getWhite(alphaF));
+
 
         // Draw text
-        context.drawText(client.textRenderer, nameText, x, y, 0xFFFFFF | (alphaInt << 24), false);
-        context.drawText(client.textRenderer, pointsText, x, y + 10, 0xFFFFFF | (alphaInt << 24), false);
-        context.drawText(client.textRenderer, totalText, x, y + 20, 0xAAAAAA | (alphaInt << 24), false);
+        context.drawText(client.textRenderer, nameText, x + 30, y, ColorHelper.withAlpha(alphaF, 0xFFFFFF), false);
+        context.drawText(client.textRenderer, pointsText, x + 30, y + 10, ColorHelper.withAlpha(alphaF, 0xFFFFFF), false);
+        context.drawText(client.textRenderer, totalText, x + 100, y + 10, ColorHelper.withAlpha(alphaF, 0xAAAAAA), false);
     }
 }
