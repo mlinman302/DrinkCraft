@@ -1,11 +1,13 @@
 package com.minman.drinkcraft;
 
-import com.mojang.text2speech.Narrator;
+import com.minman.drinkcraft.sound.DrinkSounds;
 import net.fabricmc.api.ModInitializer;
-
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
-import net.minecraft.block.Blocks;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,18 +21,48 @@ public class DrinkCraft implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
 
-		LOGGER.info("Hello World");
+//		// Pass new players on the server to PlayerEventTracker to add new instance to players list
+		ServerPlayerEvents.JOIN.register(PlayerEventTracker::registerPlayer);
 
-		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
+		// Set up custom events
+		DrinkEventRegistry.registerCustomEvents();
 
-			if(state.isIn(BlockTags.LOGS)){
-				Narrator.getNarrator().say("Breaking Wood", true, 100);
+		// Register sounds
+		DrinkSounds.registerSounds();
+
+		// Register payload information for server -> client comms
+		DrinkEventPayload.registerPayload();
+
+
+
+		// Player death (tracked at death)
+		ServerLivingEntityEvents.AFTER_DEATH.register((deadEntity, damageSource) -> {
+			if (deadEntity instanceof ServerPlayerEntity player){
+				PlayerEventTracker.trackEventWithPayload(EventIds.PLAYER_DEATH, player);
 			}
 		});
 
+
+		// Player kill
+		ServerEntityCombatEvents.AFTER_KILLED_OTHER_ENTITY.register((world, entity, killedEntity, damageSource) -> {
+			// if a player on the server was killed by another player on the server
+			// pattern matches entity to player
+			if (killedEntity instanceof ServerPlayerEntity && entity instanceof ServerPlayerEntity player){
+				PlayerEventTracker.trackEventWithPayload(EventIds.PLAYER_KILL, player);
+			}
+		});
+
+
+		// Block breaking event: Handled in Fabric callback
+		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
+			if (player instanceof ServerPlayerEntity serverPlayer) {
+
+				// First wood break
+				if (state.isIn(BlockTags.LOGS) && PlayerEventTracker.shouldTrack(EventIds.FIRST_WOOD_BREAK, serverPlayer.getUuid())) {
+					PlayerEventTracker.trackEventWithPayload(EventIds.FIRST_WOOD_BREAK, serverPlayer);
+				}
+			}
+		});
 	}
 }
