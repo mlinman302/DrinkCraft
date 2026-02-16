@@ -3,7 +3,10 @@
 	"package": "com.minman.drinkcraft.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin",
+      	"onSlotClickMixin",
+		"onEquipStackMixin",
+		"onGrantAdvancementCriterionMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

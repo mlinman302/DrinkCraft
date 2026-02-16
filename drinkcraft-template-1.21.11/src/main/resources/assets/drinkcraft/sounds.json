@@ -1,0 +1,8 @@
+{
+  "beer_drink": {
+    "subtitle": "sounds.drinkcraft.beer_drink",
+    "sounds": [
+      "drinkcraft:beer_drink"
+    ]
+  }
+}
