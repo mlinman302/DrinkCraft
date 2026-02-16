@@ -15,7 +15,7 @@ public class HudNotificationManager {
     private static final int MAX_NOTIFICATIONS = 3;
     private static final double DISPLAY_TIME = 4.0; // seconds
     private static final double FADE_TIME = 1.0; // seconds
-    private static final double WAIT_TIME = 2.0; // seconds
+    private static final double WAIT_TIME = 4.0; // seconds
 
     public static final Identifier TOAST_BG = Identifier.of("minecraft", "textures/gui/sprites/toast/advancement.png");
     public static final Identifier BEER_SPRITE = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/sprites/beer.png");
@@ -52,7 +52,7 @@ public class HudNotificationManager {
         int screenHeight = drawContext.getScaledWindowHeight();
         int screenWidth = drawContext.getScaledWindowWidth();
 
-            int y = (int) (screenHeight * 0.1); // Start above center
+            int y = (int) (screenHeight * 0.05); // Start at top right
 
             for (OnScreenNotification notification : ACTIVE_NOTIFICATIONS) {
                 notification.renderNotification(drawContext, screenWidth, y);

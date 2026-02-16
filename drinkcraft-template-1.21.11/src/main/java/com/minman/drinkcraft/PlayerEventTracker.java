@@ -4,6 +4,9 @@ import com.minman.drinkcraft.sound.DrinkSounds;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.advancement.Advancement;
+import net.minecraft.advancement.AdvancementDisplay;
+import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -119,12 +122,24 @@ public class PlayerEventTracker {
         return tracker;
     }
 
-    public static void trackAdvancementWithPayload(String id, ServerPlayerEntity player){
-        trackAdvancementEvent(id, player.getUuid());
+    public static void trackAdvancementWithPayload(AdvancementEntry advancement, ServerPlayerEntity player){
+        String advId = advancement.id().toString();
+        trackAdvancementEvent(advId, player.getUuid());
         DrinkEvent basicAdvancementEvent = DrinkEventRegistry.getEvent(EventIds.ALL_ADVANCEMENTS);
+
+        AdvancementDisplay display = advancement.value().display().orElse(null);
+
+        String displayName;
+
+        if (display != null) {
+            displayName = display.getTitle().getString();
+        }else{
+            displayName = advId;
+        }
+
         notifyClient(player, new DrinkEvent(
-                id,
-                id,
+                advId,
+                displayName,
                 basicAdvancementEvent.maxOccurrences(),
                 basicAdvancementEvent.sips(),
                 basicAdvancementEvent.forAll()
@@ -138,9 +153,10 @@ public class PlayerEventTracker {
                 DrinkEventRegistry.getEvent(EventIds.ALL_ADVANCEMENTS).sips() + " Sips");
     }
 
-    public static boolean shouldTrackAdvancement(String id, UUID uuid){
-        String[] splitId = id.split("[:/]");
-        return trackableAdvancement(splitId) && playerDoesntHaveAdvancement(id, uuid);
+    public static boolean shouldTrackAdvancement(AdvancementEntry advancement, UUID uuid){
+        String advId = advancement.id().toString();
+        String[] splitId = advId.split("[:/]");
+        return trackableAdvancement(splitId) && playerDoesntHaveAdvancement(advId, uuid);
     }
 
     public static Collection<UUID> getAllUUIDs(){

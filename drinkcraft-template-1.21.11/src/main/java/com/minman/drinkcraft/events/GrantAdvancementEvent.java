@@ -7,8 +7,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 public class GrantAdvancementEvent {
     public static void logAdvancement(ServerPlayerEntity player, AdvancementEntry advancement) {
 
-        if (PlayerEventTracker.shouldTrackAdvancement(advancement.id().toString(), player.getUuid())){
-            PlayerEventTracker.trackAdvancementWithPayload(advancement.id().toString(), player);
+        if (PlayerEventTracker.shouldTrackAdvancement(advancement, player.getUuid())){
+            PlayerEventTracker.trackAdvancementWithPayload(advancement, player);
         };
     }
 }

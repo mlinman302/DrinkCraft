@@ -22,7 +22,7 @@ public class OnScreenImage extends OnScreenEvent {
 
 
         drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, this.id,
-                (int) (screenWidth * 0.1), (int) (screenHeight * 0.1),
+                (int) (screenWidth * 0.07), (int) (screenHeight * 0.07),
                 0.0F, 0.0F,
                 (int) (screenWidth * 0.8), (int) (screenHeight * 0.8),
                 (int) (screenWidth * 0.8), (int) (screenHeight * 0.8),

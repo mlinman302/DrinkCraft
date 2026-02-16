@@ -26,7 +26,7 @@ public class HudImageManager {
 
     private static final int MAX_IMAGES = 1;
     private static final double FADE_IN_TIME = 0.1;
-    private static final double DISPLAY_TIME = 2.0;
+    private static final double DISPLAY_TIME = 4.0;
     private static final double FADE_OUT_TIME = 2.0;
 
 
