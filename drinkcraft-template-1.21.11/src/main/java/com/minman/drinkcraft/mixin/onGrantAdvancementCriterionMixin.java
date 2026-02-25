@@ -20,7 +20,6 @@ public class onGrantAdvancementCriterionMixin {
             method = "grantCriterion",
             at = @At("TAIL")
     )public void grantCriterion(AdvancementEntry advancement, String criterionName, CallbackInfoReturnable<Boolean> cir){
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this.owner;
-        GrantAdvancementEvent.logAdvancement(player, advancement);
+        GrantAdvancementEvent.logAdvancement(this.owner, advancement);
         }
 }

@@ -1,12 +1,9 @@
-package com.minman.drinkcraft;
+package com.minman.drinkcraft.client;
 
-import com.minman.drinkcraft.client.ClientEventHandler;
-import com.minman.drinkcraft.client.HudImageManager;
-import com.minman.drinkcraft.client.HudNotificationManager;
+import com.minman.drinkcraft.DrinkCraft;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.minecraft.util.Identifier;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;

@@ -39,6 +39,7 @@ public class HudNotificationManager {
                 WAIT_TIME));
     };
 
+
     public static void render(DrawContext drawContext, RenderTickCounter tickCounter) {
         // remove old notifications
         ACTIVE_NOTIFICATIONS.removeIf(OnScreenNotification::isExpired);
