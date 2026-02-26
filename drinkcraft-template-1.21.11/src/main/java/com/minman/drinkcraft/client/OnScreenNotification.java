@@ -19,6 +19,10 @@ public class OnScreenNotification extends OnScreenEvent{
         this.totalSips = totalSips;
     }
 
+    public void setPosition(int pos){
+        position = pos;
+    }
+
     public int getTotalSips(){
         return this.totalSips;
     }
