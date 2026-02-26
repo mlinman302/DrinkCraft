@@ -2,7 +2,7 @@ package com.minman.drinkcraft.events;
 
 
 import com.minman.drinkcraft.EventIds;
-import com.minman.drinkcraft.PlayerEventTracker;
+import com.minman.drinkcraft.PlayerEventsTracker;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -18,8 +18,8 @@ public class ArmorEvents {
         // if the full armor is equipped
         if(! (helmet.isEmpty() && chestplate.isEmpty() && leggings.isEmpty() && boots.isEmpty())){
             // if we can track the event
-            if (PlayerEventTracker.shouldTrack(EventIds.FULL_ARMOR, player.getUuid())){
-                PlayerEventTracker.trackEventWithPayload(EventIds.FULL_ARMOR, player);
+            if (PlayerEventsTracker.shouldTrack(EventIds.FULL_ARMOR, player.getUuid())){
+                PlayerEventsTracker.trackEventWithPayload(EventIds.FULL_ARMOR, player);
             }
         }
 

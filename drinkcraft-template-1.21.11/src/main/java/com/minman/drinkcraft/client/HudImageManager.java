@@ -68,7 +68,4 @@ public class HudImageManager {
         ACTIVE_IMAGE.getFirst().renderImage(drawContext, screenWidth, screenHeight);
     }
 
-    public static void renderOverScreen(){
-
-    }
 }

@@ -22,7 +22,7 @@
 			"com.minman.drinkcraft.DrinkCraftDataGenerator"
 		],
 		"client": [
-			"com.minman.drinkcraft.DrinkCraftModClient"
+			"com.minman.drinkcraft.client.DrinkCraftModClient"
 		]
 	},
 	"mixins": [
