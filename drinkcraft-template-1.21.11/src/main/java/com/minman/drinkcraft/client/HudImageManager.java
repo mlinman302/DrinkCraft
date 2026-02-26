@@ -18,6 +18,13 @@ public class HudImageManager {
     private static final Identifier SOYJAK_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/soyjak.png");
     private static final Identifier PINT_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/pint.png");
     private static final Identifier GUY_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/guy.png");
+    private static final Identifier CALL_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/call.png");
+    private static final Identifier DOG_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/dog.png");
+    private static final Identifier GEM_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/gem.png");
+    private static final Identifier OHTANI_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/ohtani.png");
+    private static final Identifier SLIDER_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/slider.png");
+    private static final Identifier TRUMP_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/trump.png");
+
 
 
     private static final List<Identifier> IMAGES = new ArrayList<>();
@@ -38,6 +45,12 @@ public class HudImageManager {
         IMAGES.add(SOYJAK_IMG);
         IMAGES.add(PINT_IMG);
         IMAGES.add(GUY_IMG);
+        IMAGES.add(CALL_IMG);
+        IMAGES.add(DOG_IMG);
+        IMAGES.add(GEM_IMG);
+        IMAGES.add(OHTANI_IMG);
+        IMAGES.add(SLIDER_IMG);
+        IMAGES.add(TRUMP_IMG);
     }
 
     public static void addImage(){
