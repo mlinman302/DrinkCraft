@@ -26,19 +26,11 @@ public class HudImageManager {
     private static final Identifier TRUMP_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/trump.png");
 
 
-
-    private static final List<Identifier> IMAGES = new ArrayList<>();
+    private static final List<Identifier> IMAGES = new ArrayList<>(12);
     private static final Random myRandom = new Random();
     private static final List<OnScreenImage> ACTIVE_IMAGE = new ArrayList<>(1);
 
-    private static final int MAX_IMAGES = 1;
-    private static final double FADE_IN_TIME = 0.1;
-    private static final double DISPLAY_TIME = 4.0;
-    private static final double FADE_OUT_TIME = 2.0;
-
-
-
-    public static void registerImages(){
+    public static void register(){
         IMAGES.add(COORS_IMG);
         IMAGES.add(IPA_IMG);
         IMAGES.add(RBOW_IMG);

@@ -10,8 +10,6 @@ import java.util.List;
 public class HudTextManager {
 
     public static final List<OnScreenText> DISPLAY_TEXT = new ArrayList<>(1);
-    private static final double FADE_TIME = 1.0; // seconds
-    private static final double WAIT_TIME = 5.0; // seconds
 
 
     public static void addText(int sips) {

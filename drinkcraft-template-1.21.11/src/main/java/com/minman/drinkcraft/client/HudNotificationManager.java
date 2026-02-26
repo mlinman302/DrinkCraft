@@ -1,9 +1,9 @@
 package com.minman.drinkcraft.client;
 
 import com.minman.drinkcraft.DrinkCraft;
-import net.minecraft.block.entity.VaultBlockEntity;
 import net.minecraft.client.gui.DrawContext;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.client.render.RenderTickCounter;
@@ -14,9 +14,6 @@ public class HudNotificationManager {
 
     private static final List<OnScreenNotification> ACTIVE_NOTIFICATIONS = new ArrayList<>();
     private static final int MAX_NOTIFICATIONS = 3;
-    private static final double DISPLAY_TIME = 4.0; // seconds
-    private static final double FADE_TIME = 1.0; // seconds
-    private static final double WAIT_TIME = 4.0; // seconds
 
     public static final Identifier TOAST_BG = Identifier.of("minecraft", "textures/gui/sprites/toast/advancement.png");
     public static final Identifier BEER_SPRITE = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/sprites/beer.png");
@@ -51,6 +48,12 @@ public class HudNotificationManager {
             return;
         }
 
+        // update position of remaining notifications
+        for(int i = 0; i < ACTIVE_NOTIFICATIONS.size(); i++){
+            ACTIVE_NOTIFICATIONS.get(i).setPosition(i);
+        }
+
+        // draw each notification
         ACTIVE_NOTIFICATIONS.forEach(notification -> {
                 notification.render(drawContext);
         });
