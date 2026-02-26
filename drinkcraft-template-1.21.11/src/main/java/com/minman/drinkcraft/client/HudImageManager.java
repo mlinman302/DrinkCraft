@@ -8,6 +8,7 @@ import net.minecraft.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class HudImageManager {
@@ -18,38 +19,51 @@ public class HudImageManager {
     private static final Identifier SOYJAK_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/soyjak.png");
     private static final Identifier PINT_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/pint.png");
     private static final Identifier GUY_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/guy.png");
+    private static final Identifier CALL_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/call.png");
+    private static final Identifier DOG_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/dog.png");
+    private static final Identifier GEM_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/gem.png");
+    private static final Identifier OHTANI_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/ohtani.png");
+    private static final Identifier SLIDER_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/slider.png");
+    private static final Identifier TRUMP_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/trump.png");
 
 
-    private static final List<Identifier> IMAGES = new ArrayList<>();
+    private static final List<Identifier> IMAGES = new ArrayList<>(12);
     private static final Random myRandom = new Random();
     private static final List<OnScreenImage> ACTIVE_IMAGE = new ArrayList<>(1);
 
-    private static final int MAX_IMAGES = 1;
-    private static final double FADE_IN_TIME = 0.1;
-    private static final double DISPLAY_TIME = 4.0;
-    private static final double FADE_OUT_TIME = 2.0;
-
-
-
-    public static void registerImages(){
+    public static void register(){
         IMAGES.add(COORS_IMG);
         IMAGES.add(IPA_IMG);
         IMAGES.add(RBOW_IMG);
         IMAGES.add(SOYJAK_IMG);
         IMAGES.add(PINT_IMG);
         IMAGES.add(GUY_IMG);
+        IMAGES.add(CALL_IMG);
+        IMAGES.add(DOG_IMG);
+        IMAGES.add(GEM_IMG);
+        IMAGES.add(OHTANI_IMG);
+        IMAGES.add(SLIDER_IMG);
+        IMAGES.add(TRUMP_IMG);
     }
 
-    public static void addImage(){
+    public static void addImage(String eventName){
         OnScreenImage osImg = new OnScreenImage(
-                IMAGES.get(myRandom.nextInt(IMAGES.size())),
+                randomOrSet(eventName),
                 Util.getMeasuringTimeMs() / 1000.0,
-                DISPLAY_TIME,
-                FADE_IN_TIME,
-                FADE_OUT_TIME);
+                ClientTimings.IMAGE_DURATION,
+                ClientTimings.FAST_FADE_TIME,
+                ClientTimings.SLOW_FADE_TIME);
 
         ACTIVE_IMAGE.addFirst(osImg);
 
+    }
+
+    private static Identifier randomOrSet(String eventId){
+        if(Objects.equals(eventId, "Diamonds!")){
+            return GEM_IMG;
+        }else{
+            return IMAGES.get(myRandom.nextInt(IMAGES.size()));
+        }
     }
 
     public static void render(DrawContext drawContext, RenderTickCounter tickCounter) {
@@ -61,11 +75,7 @@ public class HudImageManager {
             return;
         }
 
-        int screenHeight = drawContext.getScaledWindowHeight();
-        int screenWidth = drawContext.getScaledWindowWidth();
-
-
-        ACTIVE_IMAGE.getFirst().renderImage(drawContext, screenWidth, screenHeight);
+        ACTIVE_IMAGE.getFirst().render(drawContext);
     }
 
 }

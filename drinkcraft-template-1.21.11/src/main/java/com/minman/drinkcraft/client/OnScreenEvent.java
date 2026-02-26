@@ -5,7 +5,7 @@ import net.minecraft.util.Util;
 public abstract class OnScreenEvent {
     final double endTime;
     private final double duration;
-    private final double fadeInTime;
+    protected final double fadeInTime;
     private final double fadeOutTime;
 
     public OnScreenEvent(double startTime, double duration, double fadeInTime, double fadeOutTime, double waitTime){

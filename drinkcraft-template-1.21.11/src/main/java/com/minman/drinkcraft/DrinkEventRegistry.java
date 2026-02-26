@@ -65,6 +65,15 @@ public class DrinkEventRegistry {
                     2,
                     false
             ));
+
+            // random block breaking event
+            registerEvent(new DrinkEvent(
+                    EventIds.RANDOM_STONE_BREAK,
+                    "There's Beer in the Stone",
+                    -1,
+                    2,
+                    false
+            ));
         }
 
     public static DrinkEvent getEvent(String id){

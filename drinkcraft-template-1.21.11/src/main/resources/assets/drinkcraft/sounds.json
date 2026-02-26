@@ -1,8 +1,14 @@
 {
   "beer_drink": {
-    "subtitle": "sounds.drinkcraft.beer_drink",
+    "subtitle": "Drinking Beer",
     "sounds": [
       "drinkcraft:beer_drink"
+    ]
+  },
+  "beer_laugh": {
+    "subtitle": "Drinking Beer Random",
+    "sounds": [
+      "drinkcraft:beer_laugh"
     ]
   }
 }

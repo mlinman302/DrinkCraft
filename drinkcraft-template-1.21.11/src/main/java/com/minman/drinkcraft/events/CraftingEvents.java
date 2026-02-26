@@ -1,5 +1,6 @@
 package com.minman.drinkcraft.events;
 
+import com.minman.drinkcraft.DrinkCraft;
 import com.minman.drinkcraft.EventIds;
 import com.minman.drinkcraft.PlayerEventsTracker;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,6 +16,7 @@ public class CraftingEvents {
             // Creating an eye of ender
             if (craftedItem.isOf(Items.ENDER_EYE)){
                 PlayerEventsTracker.trackEventForAllWithPayload(EventIds.ENDER_EYE, serverPlayer);
+
             }
         }
 

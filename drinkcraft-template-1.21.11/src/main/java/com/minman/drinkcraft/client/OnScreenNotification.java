@@ -10,15 +10,24 @@ public class OnScreenNotification extends OnScreenEvent{
     private final String eventName;
     private final int sips;
     private final int totalSips;
+    private int position;
 
-    public OnScreenNotification(String eventName, int sips, int totalSips, double startTime, double duration, double fadeInTime, double fadeOutTime, double waitTime) {
+    public OnScreenNotification(String eventName, int sips, int totalSips, double startTime, double duration, double fadeInTime, double fadeOutTime, double waitTime, int position) {
         super(startTime, duration, fadeInTime, fadeOutTime, waitTime);
         this.eventName = eventName;
         this.sips = sips;
         this.totalSips = totalSips;
     }
 
-    public void renderNotification(DrawContext context, int screenWidth, int y) {
+    public void setPosition(int pos){
+        position = pos;
+    }
+
+    public int getTotalSips(){
+        return this.totalSips;
+    }
+
+    public void render(DrawContext context) {
         MinecraftClient client = MinecraftClient.getInstance();
 
         double timeRemaining = this.endTime - (Util.getMeasuringTimeMs() / 1000.0) ;
@@ -30,11 +39,13 @@ public class OnScreenNotification extends OnScreenEvent{
         String totalText = "§7Total: " + totalSips;
         String nameText = "§6" + eventName;
 
-        int x = (int) (screenWidth * 0.05);
+        int padding = 5;
+        int x = 0;
+        int y = 30 * position;
 
 
         context.drawTexture(RenderPipelines.GUI_TEXTURED, HudNotificationManager.TOAST_BG,
-                x - 5, y - 5,
+                x, y,
                 0.0F, 0.0F,
                 160, 32,
                 160, 32,
@@ -43,7 +54,7 @@ public class OnScreenNotification extends OnScreenEvent{
 
         // Draw sprite
         context.drawTexture(RenderPipelines.GUI_TEXTURED, HudNotificationManager.BEER_SPRITE,
-                x, y,
+                x + 6, y + 6,
                 0.0F, 0.0F,
                 20, 20,
                 20, 20,
@@ -51,8 +62,8 @@ public class OnScreenNotification extends OnScreenEvent{
 
 
         // Draw text
-        context.drawText(client.textRenderer, nameText, x + 30, y, ColorHelper.withAlpha(alphaF, 0xFFFFFF), false);
-        context.drawText(client.textRenderer, pointsText, x + 30, y + 10, ColorHelper.withAlpha(alphaF, 0xFFFFFF), false);
-        context.drawText(client.textRenderer, totalText, x + 100, y + 10, ColorHelper.withAlpha(alphaF, 0xAAAAAA), false);
+        context.drawText(client.textRenderer, nameText, x + 30, y + 6, ColorHelper.withAlpha(alphaF, 0xFFFFFF), false);
+        context.drawText(client.textRenderer, pointsText, x + 30, y + 16, ColorHelper.withAlpha(alphaF, 0xFFFFFF), false);
+        context.drawText(client.textRenderer, totalText, x + 100, y + 16, ColorHelper.withAlpha(alphaF, 0xAAAAAA), false);
     }
 }

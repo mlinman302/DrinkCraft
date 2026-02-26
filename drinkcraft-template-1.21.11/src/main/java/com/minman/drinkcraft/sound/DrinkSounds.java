@@ -9,11 +9,11 @@ import net.minecraft.util.Identifier;
 public class DrinkSounds {
 
     public static final SoundEvent BEER_DRINK = register("beer_drink");
+    public static final SoundEvent BEER_LAUGH = register("beer_laugh");
 
     private static SoundEvent register(String name){
         Identifier id = Identifier.of(DrinkCraft.MOD_ID, name);
         return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
-
     }
 
     public static void registerSounds(){

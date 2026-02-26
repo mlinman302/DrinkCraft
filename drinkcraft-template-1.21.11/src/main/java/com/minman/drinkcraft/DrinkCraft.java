@@ -1,5 +1,6 @@
 package com.minman.drinkcraft;
 
+import com.jcraft.jorbis.Block;
 import com.minman.drinkcraft.sound.DrinkSounds;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
@@ -12,6 +13,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Random;
+
 public class DrinkCraft implements ModInitializer {
 	public static final String MOD_ID = "drinkcraft";
 
@@ -23,11 +26,12 @@ public class DrinkCraft implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
+		Random myRandom = new Random();
+
 		// when the server starts, create or load data
 		ServerLifecycleEvents.SERVER_STARTED.register(server -> {
 			PlayersEventsState playersData = PlayersEventsState.getOrCreate(server);
 			PlayerEventsTracker.updatePlayersState(playersData);
-			LOGGER.info(PlayerEventsTracker.getPlayersState().toString());
 		});
 
 
@@ -70,6 +74,12 @@ public class DrinkCraft implements ModInitializer {
 				// First wood break
 				if (state.isIn(BlockTags.LOGS) && PlayerEventsTracker.shouldTrack(EventIds.FIRST_WOOD_BREAK, serverPlayer.getUuid())) {
 					PlayerEventsTracker.trackEventWithPayload(EventIds.FIRST_WOOD_BREAK, serverPlayer);
+				}
+
+				// Random stone break
+				// Always tracks so no need to check if should track
+				if (state.isIn(BlockTags.BASE_STONE_OVERWORLD) && (myRandom.nextInt(100) > 10)){
+					PlayerEventsTracker.trackEventWithPayload(EventIds.RANDOM_STONE_BREAK, serverPlayer);
 				}
 			}
 		});

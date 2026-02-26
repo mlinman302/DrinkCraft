@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.ColorHelper;
 
-public class OnScreenImage extends OnScreenEvent {
+public class OnScreenImage extends OnScreenEvent implements Renderable{
     private final Identifier id;
 
     public OnScreenImage(Identifier id, double startTime, double duration, double fadeInTime, double fadeOutTime) {
@@ -14,7 +14,9 @@ public class OnScreenImage extends OnScreenEvent {
         this.id = id;
     }
 
-    public void renderImage(DrawContext drawContext, int screenWidth, int screenHeight){
+    public void render(DrawContext drawContext){
+        int screenWidth = drawContext.getScaledWindowWidth();
+        int screenHeight = drawContext.getScaledWindowHeight();
 
         double timeRemaining = this.endTime - (Util.getMeasuringTimeMs() / 1000.0) ;
         double alpha = getAlpha(timeRemaining);

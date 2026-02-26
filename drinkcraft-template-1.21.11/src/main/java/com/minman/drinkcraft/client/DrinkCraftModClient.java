@@ -19,18 +19,24 @@ public class DrinkCraftModClient implements ClientModInitializer {
         ClientEventHandler.register();
 
         // register images for rendering
-        HudImageManager.registerImages();
+        HudImageManager.register();
 
 
-        // attach image layer after Chat
+        // attach notif layer after Chat
         HudElementRegistry.attachElementAfter(
                 VanillaHudElements.CHAT,
                 Identifier.of(DrinkCraft.MOD_ID, "before_chat"),
                 HudNotificationManager::render);
 
-        // attach notification layer on top
+        // attach image layer on top
         HudElementRegistry.addFirst(
                 Identifier.of(DrinkCraft.MOD_ID, "top_layer"),
                 HudImageManager::render);
+
+        // attach text layer in between
+        HudElementRegistry.addFirst(
+                Identifier.of(DrinkCraft.MOD_ID, "after_chat"),
+                HudTextManager::render);
     }
+
 }
