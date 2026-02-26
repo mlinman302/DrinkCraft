@@ -54,46 +54,22 @@ public class PlayerEventsTracker {
     public static void trackEventWithPayload(String id, ServerPlayerEntity player){
         PlayerEvents pEvents = trackEvent(id, player.getUuid());
         notifyClient(player, pEvents, DrinkEventRegistry.getEvent(id));
+        playersState.markDirty();
     }
 
     public static void trackEventForAllWithPayload(String id, ServerPlayerEntity player){
-        trackEventForAll(id);
         MinecraftServer server = player.getEntityWorld().getServer();
+        assert server != null;
 
         playersState.getPlayersData().forEach((uuid, pEvents) -> {
-            assert server != null;
-            notifyClient(Objects.requireNonNull(server.getPlayerManager().getPlayer(uuid)), pEvents, DrinkEventRegistry.getEvent(id));
+            if(pEvents.shouldTrack(id)){
+                trackEvent(id, uuid);
+                DrinkCraft.LOGGER.info("Tracking for player: {}", pEvents.getName());
+                notifyClient(Objects.requireNonNull(server.getPlayerManager().getPlayer(uuid)), pEvents, DrinkEventRegistry.getEvent(id));
+            }
         });
     }
 
-
-//    public static Text trackEventWithPlayerMessage(String id, UUID uuid){
-//        PlayerEventsTracker tracker = trackEvent(id, uuid);
-//        return Text.literal(DrinkEventRegistry.getEvent(id).displayName()
-//                + ". " + tracker.name + " Takes " + DrinkEventRegistry.getEvent(id).sips() + " Sips");
-//    };
-
-    public static void trackEventForAll(String id){
-        DrinkEvent event = DrinkEventRegistry.getEvent(id);
-
-        if (event == null) {
-            throw new RuntimeException("Drink event not found in registry.");
-        }
-
-        playersState.getPlayersData().forEach((uuid, pEvents) -> {
-            if (pEvents.shouldTrack(id)) {
-                trackEvent(id, uuid);
-            }
-        });
-
-    };
-
-//    public static Text trackEventForAllWithPlayerMessage(String id){
-//        trackEventForAll(id);
-//        return Text.literal(DrinkEventRegistry.getEvent(id).displayName()
-//                + ". All Players Take " + DrinkEventRegistry.getEvent(id).sips() + " Sips");
-//
-//    };
 
     public static boolean shouldTrack(String id, UUID uuid){
         PlayerEvents pEvents = getPlayerEvents(uuid); // get specific playerEvents
@@ -132,12 +108,6 @@ public class PlayerEventsTracker {
         ));
 
     }
-
-//    public static Text trackAdvancementEventWithPlayerMessage(String id, UUID uuid){
-//        PlayerEventsTracker tracker = trackAdvancementEvent(id, uuid);
-//        return Text.literal(id + tracker.name + " Take " +
-//                DrinkEventRegistry.getEvent(EventIds.ALL_ADVANCEMENTS).sips() + " Sips");
-//    }
 
     public static boolean shouldTrackAdvancement(AdvancementEntry advancement, UUID uuid){
         String advId = advancement.id().toString();

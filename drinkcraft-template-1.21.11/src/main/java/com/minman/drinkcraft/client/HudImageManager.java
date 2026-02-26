@@ -24,7 +24,7 @@ public class HudImageManager {
     private static final Identifier OHTANI_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/ohtani.png");
     private static final Identifier SLIDER_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/slider.png");
     private static final Identifier TRUMP_IMG = Identifier.of(DrinkCraft.MOD_ID, "textures/gui/trump.png");
-    
+
 
     private static final List<Identifier> IMAGES = new ArrayList<>(12);
     private static final Random myRandom = new Random();
