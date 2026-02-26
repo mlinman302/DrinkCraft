@@ -32,5 +32,11 @@ public class DrinkCraftModClient implements ClientModInitializer {
         HudElementRegistry.addFirst(
                 Identifier.of(DrinkCraft.MOD_ID, "top_layer"),
                 HudImageManager::render);
+
+        // attach text layer
+        HudElementRegistry.addFirst(
+                Identifier.of(DrinkCraft.MOD_ID, "after_chat"),
+                HudTextManager::render);
     }
+
 }

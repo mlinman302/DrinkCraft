@@ -9,39 +9,31 @@ import java.util.List;
 
 public class HudTextManager {
 
-    public static final List<OnScreenText> DISPLAY_TEXT = new ArrayList<>();
-
-    private static final int MAX_NOTIFICATIONS = 1;
-    private static final double DISPLAY_TIME = Double.POSITIVE_INFINITY; // seconds
+    public static final List<OnScreenText> DISPLAY_TEXT = new ArrayList<>(1);
     private static final double FADE_TIME = 1.0; // seconds
-    private static final double WAIT_TIME = 8.0; // seconds
+    private static final double WAIT_TIME = 5.0; // seconds
 
 
-    public static void addText(int sips){
+    public static void addText(int sips) {
         OnScreenText osText = new OnScreenText(
-                Util.getMeasuringTimeMs(),
-                DISPLAY_TIME,
-                FADE_TIME,
-                WAIT_TIME,
-                "Test Message"
-                );
-        DISPLAY_TEXT.add(osText);
+                Util.getMeasuringTimeMs() / 1000.0,
+                ClientTimings.SLOW_FADE_TIME,
+                ClientTimings.IMAGE_DURATION + ClientTimings.NOTIF_DURATION,
+                String.format("%d Sips", sips)
+        );
+        // only one element in the list
+        DISPLAY_TEXT.addFirst(osText);
 
     }
 
     public static void render(DrawContext drawContext, RenderTickCounter tickCounter) {
-        // remove text if it is expired
-        DISPLAY_TEXT.removeIf(OnScreenText::isExpired);
+        // no need to remove text as it is only one in first index
 
         // if no text
         if (DISPLAY_TEXT.isEmpty()) {
             return;
         }
 
-        int screenHeight = drawContext.getScaledWindowHeight();
-        int screenWidth = drawContext.getScaledWindowWidth();
-
-//
-//        DISPLAY_TEXT.getFirst().renderText(drawContext);
+        DISPLAY_TEXT.getFirst().render(drawContext);
     }
 }

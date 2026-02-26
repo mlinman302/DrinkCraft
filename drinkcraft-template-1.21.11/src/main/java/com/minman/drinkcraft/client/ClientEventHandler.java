@@ -45,7 +45,10 @@ public class ClientEventHandler {
         // Show Image
         HudImageManager.addImage();
 
+
+        // Add text
         HudTextManager.addText(totalSips);
+
 
 
     }

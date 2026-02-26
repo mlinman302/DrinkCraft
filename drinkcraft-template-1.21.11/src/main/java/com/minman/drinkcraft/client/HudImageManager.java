@@ -44,9 +44,9 @@ public class HudImageManager {
         OnScreenImage osImg = new OnScreenImage(
                 IMAGES.get(myRandom.nextInt(IMAGES.size())),
                 Util.getMeasuringTimeMs() / 1000.0,
-                DISPLAY_TIME,
-                FADE_IN_TIME,
-                FADE_OUT_TIME);
+                ClientTimings.IMAGE_DURATION,
+                ClientTimings.FAST_FADE_TIME,
+                ClientTimings.SLOW_FADE_TIME);
 
         ACTIVE_IMAGE.addFirst(osImg);
 
@@ -61,11 +61,7 @@ public class HudImageManager {
             return;
         }
 
-        int screenHeight = drawContext.getScaledWindowHeight();
-        int screenWidth = drawContext.getScaledWindowWidth();
-
-
-        ACTIVE_IMAGE.getFirst().renderImage(drawContext, screenWidth, screenHeight);
+        ACTIVE_IMAGE.getFirst().render(drawContext);
     }
 
 }

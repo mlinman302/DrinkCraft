@@ -1,6 +1,7 @@
 package com.minman.drinkcraft.client;
 
 import com.minman.drinkcraft.DrinkCraft;
+import net.minecraft.block.entity.VaultBlockEntity;
 import net.minecraft.client.gui.DrawContext;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +34,11 @@ public class HudNotificationManager {
                 sips,
                 totalSips,
                 Util.getMeasuringTimeMs() / 1000.0,
-                DISPLAY_TIME,
-                FADE_TIME,
-                FADE_TIME,
-                WAIT_TIME));
+                ClientTimings.NOTIF_DURATION,
+                ClientTimings.FAST_FADE_TIME,
+                ClientTimings.FAST_FADE_TIME,
+                ClientTimings.IMAGE_DURATION,
+                ACTIVE_NOTIFICATIONS.size()));
     };
 
 
@@ -49,16 +51,9 @@ public class HudNotificationManager {
             return;
         }
 
-        // if there are notifications then draw them
-        int screenHeight = drawContext.getScaledWindowHeight();
-        int screenWidth = drawContext.getScaledWindowWidth();
-
-            int y = (int) (screenHeight * 0.05); // Start at top right
-
-            for (OnScreenNotification notification : ACTIVE_NOTIFICATIONS) {
-                notification.renderNotification(drawContext, screenWidth, y);
-                y -= 30; // Stack notifications upward
-            }
+        ACTIVE_NOTIFICATIONS.forEach(notification -> {
+                notification.render(drawContext);
+        });
 
     }
 
