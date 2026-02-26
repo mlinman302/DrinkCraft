@@ -15,7 +15,6 @@ public class CraftingEvents {
         if (player instanceof ServerPlayerEntity serverPlayer){
             // Creating an eye of ender
             if (craftedItem.isOf(Items.ENDER_EYE)){
-                DrinkCraft.LOGGER.info("tracked ender eye craft");
                 PlayerEventsTracker.trackEventForAllWithPayload(EventIds.ENDER_EYE, serverPlayer);
 
             }

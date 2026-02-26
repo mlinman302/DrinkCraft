@@ -28,16 +28,13 @@ public class onSlotClickMixin {
 
         // If we are inside a crafting screen
         if (handler instanceof CraftingScreenHandler || handler instanceof PlayerScreenHandler){
-            DrinkCraft.LOGGER.info("Inside crafting screen");
 
             // check slot 0 (where the result of the crafting goes) for crafted item
             if (slotIndex == 0 && (actionType == SlotActionType.PICKUP || actionType == SlotActionType.QUICK_MOVE)){
-                DrinkCraft.LOGGER.info("Clicking on slot 0");
                 ItemStack craftedItem = handler.getSlot(0).getStack();
 
                 // send the item to our crafting event callback
                 if(!craftedItem.isEmpty() && !player.getEntityWorld().isClient()){
-                    DrinkCraft.LOGGER.info("sending to callback");
                     CraftingEvents.onItemCraft(player, craftedItem);
                 }
             }

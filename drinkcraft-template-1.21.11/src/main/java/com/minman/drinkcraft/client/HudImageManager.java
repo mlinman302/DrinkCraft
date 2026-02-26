@@ -8,6 +8,7 @@ import net.minecraft.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class HudImageManager {
@@ -45,9 +46,9 @@ public class HudImageManager {
         IMAGES.add(TRUMP_IMG);
     }
 
-    public static void addImage(){
+    public static void addImage(String eventName){
         OnScreenImage osImg = new OnScreenImage(
-                IMAGES.get(myRandom.nextInt(IMAGES.size())),
+                randomOrSet(eventName),
                 Util.getMeasuringTimeMs() / 1000.0,
                 ClientTimings.IMAGE_DURATION,
                 ClientTimings.FAST_FADE_TIME,
@@ -55,6 +56,14 @@ public class HudImageManager {
 
         ACTIVE_IMAGE.addFirst(osImg);
 
+    }
+
+    private static Identifier randomOrSet(String eventId){
+        if(Objects.equals(eventId, "Diamonds!")){
+            return GEM_IMG;
+        }else{
+            return IMAGES.get(myRandom.nextInt(IMAGES.size()));
+        }
     }
 
     public static void render(DrawContext drawContext, RenderTickCounter tickCounter) {

@@ -1,6 +1,8 @@
 package com.minman.drinkcraft.client;
 
+import com.minman.drinkcraft.DrinkCraft;
 import com.minman.drinkcraft.DrinkEventPayload;
+import com.minman.drinkcraft.EventIds;
 import com.minman.drinkcraft.sound.DrinkSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -27,11 +29,21 @@ public class ClientEventHandler {
         // play sound
 
         if (client.player != null){
-            client.player.playSound(
-                    DrinkSounds.BEER_DRINK,
-                    1f,
-                    1f
-            );
+            if (eventId.equals(EventIds.RANDOM_STONE_BREAK)){
+                client.player.playSound(
+                        DrinkSounds.BEER_LAUGH,
+                        1f,
+                        1f
+                );
+            }else{
+                client.player.playSound(
+                        DrinkSounds.BEER_DRINK,
+                        1f,
+                        1f
+                );
+            }
+
+
         }
 
 
@@ -43,7 +55,7 @@ public class ClientEventHandler {
         );
 
         // Show Image
-        HudImageManager.addImage();
+        HudImageManager.addImage(eventName);
 
 
         // Add text

@@ -64,7 +64,6 @@ public class PlayerEventsTracker {
         playersState.getPlayersData().forEach((uuid, pEvents) -> {
             if(pEvents.shouldTrack(id)){
                 trackEvent(id, uuid);
-                DrinkCraft.LOGGER.info("Tracking for player: {}", pEvents.getName());
                 notifyClient(Objects.requireNonNull(server.getPlayerManager().getPlayer(uuid)), pEvents, DrinkEventRegistry.getEvent(id));
             }
         });

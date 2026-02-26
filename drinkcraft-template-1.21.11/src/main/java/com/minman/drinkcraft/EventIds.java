@@ -11,4 +11,5 @@ public class EventIds {
     public static final String ENDER_EYE = "craft_ender_eye";
     public static final String PLAYER_KILL = "player_kill";
     public static final String ALL_ADVANCEMENTS = "all_advancements";
+    public static final String RANDOM_STONE_BREAK = "random_stone_break";
 }
